@@ -40,7 +40,9 @@ Neste repositório foram entregues todos os requisitos.
 ```
 
 ## Rotas
-- Registration [http://localhost:5173/](http://localhost:5173/)
+- Livros [http://localhost:5173/livros](http://localhost:5173/livros)
+- Autores [http://localhost:5173/autores](http://localhost:5173/autores)
+- Assuntos [http://localhost:5173/assuntos](http://localhost:5173/assuntos)
 
 ## Autor
 - Autor - Jonathan Cruz
