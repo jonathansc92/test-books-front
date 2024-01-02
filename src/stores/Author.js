@@ -107,12 +107,5 @@ export const authorStore = defineStore('authorStore', {
                 toast.error(messages.ERROR);
             }
         },
-
     },
 });
-
-// this.requestDistributions.push(this.requestDistribution);
-
-
-// const itemIndex = this.requestDistributions.findIndex(distribution => distribution.id === id);
-// this.requestDistributions.splice(itemIndex, 1);

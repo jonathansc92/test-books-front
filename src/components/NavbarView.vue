@@ -11,17 +11,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <router-link class="nav-link active" aria-current="page" to="/autores">
+                        <router-link class="nav-link" :class="{ 'active': this.$route.path === '/autores' }" to="/autores">
                             Autores
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/assuntos">
+                        <router-link class="nav-link" :class="{ 'active': this.$route.path === '/assuntos' }"
+                            to="/assuntos">
                             Assuntos
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/livros">
+                        <router-link class="nav-link" :class="{ 'active': this.$route.path === '/livros' }" to="/livros">
                             Livros
                         </router-link>
                     </li>
