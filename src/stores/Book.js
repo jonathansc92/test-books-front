@@ -35,9 +35,25 @@ export const bookStore = defineStore('bookStore', {
                 toast.error(messages.ERROR);
             }
         },
+        async show(id) {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${id}`);
+
+                if (!response.ok) {
+                    toast.error(messages.ERROR);
+                }
+
+                const data = await response.json();
+
+                this.book = data.data;
+            } catch (error) {
+                console.error('Error submitting data:', error);
+                toast.error(messages.ERROR);
+            }
+        },
         async create(values) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/subjects`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/books`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -50,11 +66,10 @@ export const bookStore = defineStore('bookStore', {
                 }
 
                 const data = await response.json();
-                this.book = data.data;
-
-                this.books.push(this.book);
 
                 toast.success(data.message);
+
+                this.router.push('/livros');
             } catch (error) {
                 console.error('Error submitting data:', error);
                 toast.error(messages.ERROR);
@@ -62,7 +77,7 @@ export const bookStore = defineStore('bookStore', {
         },
         async update(id, values) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/subjects/${id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -75,12 +90,10 @@ export const bookStore = defineStore('bookStore', {
                 }
 
                 const data = await response.json();
-                this.book = data.data;
-
-                const itemIndex = this.books.findIndex(book => book.id === id);
-                this.books[itemIndex] = this.book;
 
                 toast.success(data.message);
+
+                this.router.push('/livros');
             } catch (error) {
                 console.error('Error submitting data:', error);
                 toast.error(messages.ERROR);
@@ -88,7 +101,7 @@ export const bookStore = defineStore('bookStore', {
         },
         async delete(id) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/subjects/${id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${id}`, {
                     method: 'DELETE'
                 });
 
