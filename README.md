@@ -43,6 +43,10 @@ Neste repositório foram entregues todos os requisitos.
 - Autores [http://localhost:5173/autores](http://localhost:5173/autores)
 - Assuntos [http://localhost:5173/assuntos](http://localhost:5173/assuntos)
 
+## O que faria se tivesse mais tempo?
+- Adicionaria testes;
+- Deixaria os cadastros de assuntos e autores com modal;
+
 ## Autor
 - Autor - Jonathan Cruz
 - [https://jonathansc92.github.io/jonathancruzdev/?language=ptBr](https://jonathansc92.github.io/jonathancruzdev/?language=ptBr)
