@@ -1,4 +1,9 @@
 <template>
+  <div class="row">
+    <h1 class="fs-2">
+      Gerenciar Assuntos
+    </h1>
+  </div>
   <div class="row text-end">
     <div class="col">
       <router-link class="btn btn-success me-2" to="/assuntos/cadastrar">
