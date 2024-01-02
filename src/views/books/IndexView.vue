@@ -4,6 +4,9 @@
       <router-link class="btn btn-success me-2" to="/livros/cadastrar">
         Adicionar
       </router-link>
+      <button type="button" class="btn btn-info me-2" @click="bookReportStore().report()">
+        Relatório
+      </button>
     </div>
   </div>
   <div class="row">
@@ -55,6 +58,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import { bookStore } from '@/stores/Book';
+import { bookReportStore } from '@/stores/BookReport';
 
 const store = bookStore();
 
