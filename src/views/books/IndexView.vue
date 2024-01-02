@@ -1,274 +1,165 @@
 <template>
-    <b-container fluid>
-      <!-- User Interface controls -->
-      <b-row>
-        <b-col lg="6" class="my-1">
-          <b-form-group
-            label="Sort"
-            label-for="sort-by-select"
-            label-cols-sm="3"
-            label-align-sm="right"
-            label-size="sm"
-            class="mb-0"
-            v-slot="{ ariaDescribedby }"
-          >
-            <b-input-group size="sm">
-              <b-form-select
-                id="sort-by-select"
-                v-model="sortBy"
-                :options="sortOptions"
-                :aria-describedby="ariaDescribedby"
-                class="w-75"
-              >
-                <template #first>
-                  <option value="">-- none --</option>
-                </template>
-              </b-form-select>
+  <div class="row">
+    <div class="col-3 offset-9 align-self-end">
+      <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#formModalAuthor">
+        Adicionar
+      </button>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Título</th>
+        <th scope="col">Editora</th>
+        <th scope="col">Edição</th>
+        <th scope="col">Valor</th>
+        <th scope="col">Ano Publicação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(book, index) in store.getBooks" :key="index">
+        <th scope="row">
+          {{ book.id }}
+        </th>
+        <td>
+          {{ book.title }}
+        </td>
+        <td>
+          {{ book.publisher }}
+        </td>
+        <td>
+          {{ book.edition }}
+        </td>
+        <td>
+          {{ book.price }}
+        </td>
+        <td>
+          {{ book.publish_year }}
+        </td>
+        <td>
+          <button type="button" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal"
+            data-bs-target="#formModalAuthor" @click="edt(book)">
+            Editar
+          </button>
+          <button type=" button" class="btn btn-danger btn-sm" @click="store.delete(book.id)">
+            Remover
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="modal fade" id="formModalAuthor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cadastrar Autor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <Form @submit="onSubmit">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label" for="name">
+                Título
+              </label>
+              <Field class="form-control" v-model="title" name="title" type="text" placeholder="Digite o título" />
+              <ErrorMessage name="title" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="price">
+                Preço
+              </label>
+              <Field class="form-control" v-model="price" name="price" type="text" placeholder="Digite o valor" />
+              <ErrorMessage name="price" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="name">
+                Editora
+              </label>
+              <Field class="form-control" v-model="publisher" name="publisher" type="text"
+                placeholder="Digite a editora" />
+              <ErrorMessage name="publisher" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="name">
+                Edição
+              </label>
+              <Field class="form-control" v-model="edition" name="edition" type="number" placeholder="Digite a edição" />
+              <ErrorMessage name="edition" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="name">
+                Ano Publicação
+              </label>
+              <Field class="form-control" v-model="publish_year" name="publish_year" type="number"
+                placeholder="Digite o ano da publicação" />
+              <ErrorMessage name="edition" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="authors">
+                Autores
+              </label>
+              <select v-model="selectedAuthors" class="form-select" multiple aria-label="multiple select example">
+                <option selected>Open this select menu</option>
+                <option v-for="(author, index) in authorStore().getAuthors" :key="index" :value="author.id">
+                  {{ author.name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="name">
+                Assuntos
+              </label>
+              <select v-model="selectedSubjects" class="form-select" multiple aria-label="multiple select example">
+                <option selected>Open this select menu</option>
+                <option v-for="(subject, index) in subjectStore().getSubjects" :key="index" :value="subject.id">
+                  {{ subject.description }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </Form>
+      </div>
+    </div>
+  </div>
+</template>
   
-              <b-form-select
-                v-model="sortDesc"
-                :disabled="!sortBy"
-                :aria-describedby="ariaDescribedby"
-                size="sm"
-                class="w-25"
-              >
-                <option :value="false">Asc</option>
-                <option :value="true">Desc</option>
-              </b-form-select>
-            </b-input-group>
-          </b-form-group>
-        </b-col>
-  
-        <b-col lg="6" class="my-1">
-          <b-form-group
-            label="Initial sort"
-            label-for="initial-sort-select"
-            label-cols-sm="3"
-            label-align-sm="right"
-            label-size="sm"
-            class="mb-0"
-          >
-            <b-form-select
-              id="initial-sort-select"
-              v-model="sortDirection"
-              :options="['asc', 'desc', 'last']"
-              size="sm"
-            ></b-form-select>
-          </b-form-group>
-        </b-col>
-  
-        <b-col lg="6" class="my-1">
-          <b-form-group
-            label="Filter"
-            label-for="filter-input"
-            label-cols-sm="3"
-            label-align-sm="right"
-            label-size="sm"
-            class="mb-0"
-          >
-            <b-input-group size="sm">
-              <b-form-input
-                id="filter-input"
-                v-model="filter"
-                type="search"
-                placeholder="Type to Search"
-              ></b-form-input>
-  
-              <b-input-group-append>
-                <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-              </b-input-group-append>
-            </b-input-group>
-          </b-form-group>
-        </b-col>
-  
-        <b-col lg="6" class="my-1">
-          <b-form-group
-            v-model="sortDirection"
-            label="Filter On"
-            description="Leave all unchecked to filter on all data"
-            label-cols-sm="3"
-            label-align-sm="right"
-            label-size="sm"
-            class="mb-0"
-            v-slot="{ ariaDescribedby }"
-          >
-            <b-form-checkbox-group
-              v-model="filterOn"
-              :aria-describedby="ariaDescribedby"
-              class="mt-1"
-            >
-              <b-form-checkbox value="name">Name</b-form-checkbox>
-              <b-form-checkbox value="age">Age</b-form-checkbox>
-              <b-form-checkbox value="isActive">Active</b-form-checkbox>
-            </b-form-checkbox-group>
-          </b-form-group>
-        </b-col>
-  
-        <b-col sm="5" md="6" class="my-1">
-          <b-form-group
-            label="Per page"
-            label-for="per-page-select"
-            label-cols-sm="6"
-            label-cols-md="4"
-            label-cols-lg="3"
-            label-align-sm="right"
-            label-size="sm"
-            class="mb-0"
-          >
-            <b-form-select
-              id="per-page-select"
-              v-model="perPage"
-              :options="pageOptions"
-              size="sm"
-            ></b-form-select>
-          </b-form-group>
-        </b-col>
-  
-        <b-col sm="7" md="6" class="my-1">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            align="fill"
-            size="sm"
-            class="my-0"
-          ></b-pagination>
-        </b-col>
-      </b-row>
-  
-      <!-- Main table element -->
-      <b-table
-        :items="items"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter"
-        :filter-included-fields="filterOn"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :sort-direction="sortDirection"
-        stacked="md"
-        show-empty
-        small
-        @filtered="onFiltered"
-      >
-        <template #cell(name)="row">
-          {{ row.value.first }} {{ row.value.last }}
-        </template>
-  
-        <template #cell(actions)="row">
-          <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-            Info modal
-          </b-button>
-          <b-button size="sm" @click="row.toggleDetails">
-            {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
-          </b-button>
-        </template>
-  
-        <template #row-details="row">
-          <b-card>
-            <ul>
-              <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-            </ul>
-          </b-card>
-        </template>
-      </b-table>
-  
-      <!-- Info modal -->
-      <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-        <pre>{{ infoModal.content }}</pre>
-      </b-modal>
-    </b-container>
-  </template>
-  
-  <script>
-    export default {
-      data() {
-        return {
-          items: [
-            { isActive: true, age: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
-            { isActive: false, age: 21, name: { first: 'Larsen', last: 'Shaw' } },
-            {
-              isActive: false,
-              age: 9,
-              name: { first: 'Mini', last: 'Navarro' },
-              _rowVariant: 'success'
-            },
-            { isActive: false, age: 89, name: { first: 'Geneva', last: 'Wilson' } },
-            { isActive: true, age: 38, name: { first: 'Jami', last: 'Carney' } },
-            { isActive: false, age: 27, name: { first: 'Essie', last: 'Dunlap' } },
-            { isActive: true, age: 40, name: { first: 'Thor', last: 'Macdonald' } },
-            {
-              isActive: true,
-              age: 87,
-              name: { first: 'Larsen', last: 'Shaw' },
-              _cellVariants: { age: 'danger', isActive: 'warning' }
-            },
-            { isActive: false, age: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-            { isActive: false, age: 22, name: { first: 'Genevieve', last: 'Wilson' } },
-            { isActive: true, age: 38, name: { first: 'John', last: 'Carney' } },
-            { isActive: false, age: 29, name: { first: 'Dick', last: 'Dunlap' } }
-          ],
-          fields: [
-            { key: 'name', label: 'Person full name', sortable: true, sortDirection: 'desc' },
-            { key: 'age', label: 'Person age', sortable: true, class: 'text-center' },
-            {
-              key: 'isActive',
-              label: 'Is Active',
-              formatter: (value, key, item) => {
-                return value ? 'Yes' : 'No'
-              },
-              sortable: true,
-              sortByFormatted: true,
-              filterByFormatted: true
-            },
-            { key: 'actions', label: 'Actions' }
-          ],
-          totalRows: 1,
-          currentPage: 1,
-          perPage: 5,
-          pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
-          sortBy: '',
-          sortDesc: false,
-          sortDirection: 'asc',
-          filter: null,
-          filterOn: [],
-          infoModal: {
-            id: 'info-modal',
-            title: '',
-            content: ''
-          }
-        }
-      },
-      computed: {
-        sortOptions() {
-          // Create an options list from our fields
-          return this.fields
-            .filter(f => f.sortable)
-            .map(f => {
-              return { text: f.label, value: f.key }
-            })
-        }
-      },
-      mounted() {
-        // Set the initial number of items
-        this.totalRows = this.items.length
-      },
-      methods: {
-        info(item, index, button) {
-          this.infoModal.title = `Row index: ${index}`
-          this.infoModal.content = JSON.stringify(item, null, 2)
-          this.$root.$emit('bv::show::modal', this.infoModal.id, button)
-        },
-        resetInfoModal() {
-          this.infoModal.title = ''
-          this.infoModal.content = ''
-        },
-        onFiltered(filteredItems) {
-          // Trigger pagination to update the number of buttons/pages due to filtering
-          this.totalRows = filteredItems.length
-          this.currentPage = 1
-        }
-      }
-    }
-  </script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { bookStore } from '@/stores/Book';
+import { subjectStore } from '@/stores/Subject';
+import { authorStore } from '@/stores/Author';
+import { Form, Field, useField, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
+import validation from '@/utils/validation';
+
+const store = bookStore();
+const selectedSubjects = ref([]);
+const selectedAuthors = ref([]);
+
+const { value: title } = useField('title', yup.string().required(validation.REQUIRED));
+const { value: price } = useField('price', yup.string().required(validation.REQUIRED));
+const { value: edition } = useField('edition', yup.string().required(validation.REQUIRED));
+const { value: publisher } = useField('publisher', yup.string().required(validation.REQUIRED));
+const { value: publish_year } = useField('publish_year', yup.string().required(validation.REQUIRED));
+
+function edt(subject) {
+  title.value = subject.title;
+  price.value = subject.price;
+  edition.value = subject.edition;
+  publisher.value = subject.publisher;
+  publish_year.value = subject.publish_year;
+  selectedSubjects.value = subject.subjects.map(function (subject) { return subject["subject_id"]; });
+  selectedAuthors.value = subject.authors.map(function (author) { return author["author_id"]; });
+}
+
+onMounted(async () => {
+  await store.get();
+  await subjectStore().get();
+  await authorStore().get();
+})
+</script>
