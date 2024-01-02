@@ -35,6 +35,22 @@ export const authorStore = defineStore('authorStore', {
                 toast.error(messages.ERROR);
             }
         },
+        async show(id) {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/authors/${id}`);
+
+                if (!response.ok) {
+                    toast.error(messages.ERROR);
+                }
+
+                const data = await response.json();
+
+                this.author = data.data;
+            } catch (error) {
+                console.error('Error submitting data:', error);
+                toast.error(messages.ERROR);
+            }
+        },
         async create(values) {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/authors`, {
@@ -52,9 +68,9 @@ export const authorStore = defineStore('authorStore', {
                 const data = await response.json();
                 this.author = data.data;
 
-                this.authors.push(this.author);
-
                 toast.success(data.message);
+
+                this.router.push('/autores');
             } catch (error) {
                 console.error('Error submitting data:', error);
                 toast.error(messages.ERROR);
@@ -75,12 +91,10 @@ export const authorStore = defineStore('authorStore', {
                 }
 
                 const data = await response.json();
-                this.author = data.data;
-
-                const itemIndex = this.authors.findIndex(author => author.id === id);
-                this.authors[itemIndex] = this.author;
-
+                
                 toast.success(data.message);
+
+                this.router.push('/autores');
             } catch (error) {
                 console.error('Error submitting data:', error);
                 toast.error(messages.ERROR);

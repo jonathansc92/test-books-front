@@ -14,7 +14,7 @@
         <th scope="col">Editora</th>
         <th scope="col">Edição</th>
         <th scope="col">Valor</th>
-        <th scope="col">Ano Publicação</th>
+        <th scope="col" colspan="2">Ano Publicação</th>
       </tr>
     </thead>
     <tbody>

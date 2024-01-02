@@ -35,6 +35,22 @@ export const subjectStore = defineStore('subjectStore', {
                 toast.error(messages.ERROR);
             }
         },
+        async show(id) {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/subjects/${id}`);
+
+                if (!response.ok) {
+                    toast.error(messages.ERROR);
+                }
+
+                const data = await response.json();
+
+                this.subject = data.data;
+            } catch (error) {
+                console.error('Error submitting data:', error);
+                toast.error(messages.ERROR);
+            }
+        },
         async create(values) {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/subjects`, {
@@ -50,11 +66,10 @@ export const subjectStore = defineStore('subjectStore', {
                 }
 
                 const data = await response.json();
-                this.subject = data.data;
-
-                this.subjects.push(this.subject);
 
                 toast.success(data.message);
+
+                this.router.push('/assuntos');
             } catch (error) {
                 console.error('Error submitting data:', error);
                 toast.error(messages.ERROR);
@@ -75,12 +90,10 @@ export const subjectStore = defineStore('subjectStore', {
                 }
 
                 const data = await response.json();
-                this.subject = data.data;
-
-                const itemIndex = this.subjects.findIndex(subject => subject.id === id);
-                this.subjects[itemIndex] = this.subject;
 
                 toast.success(data.message);
+
+                this.router.push('/assuntos');
             } catch (error) {
                 console.error('Error submitting data:', error);
                 toast.error(messages.ERROR);

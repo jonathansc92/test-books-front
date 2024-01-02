@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Books from '../views/books/IndexView.vue';
-import Authors from '../views/authors/IndexView.vue';
-import Subjects from '../views/subjects/IndexView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,12 +12,50 @@ const router = createRouter({
     {
       path: '/autores',
       name: 'author',
-      component: Authors,
+      component: () => import("@/views/authors/IndexView.vue"),
+      meta: {
+        title: 'Autores',
+      }
+    },
+    {
+      path: '/autores/cadastrar',
+      name: 'author-register',
+      component: () => import("@/views/authors/FormView.vue"),
+      meta: {
+        title: 'Autor - Cadastrar',
+      }
+    },
+    {
+      path: '/autores/editar/:id',
+      name: 'author-edit',
+      component: () => import("@/views/authors/FormView.vue"),
+      meta: {
+        title: 'Autor - Editar',
+      }
     },
     {
       path: '/assuntos',
-      name: 'subject',
-      component: Subjects,
+      name: 'subjects',
+      component: () => import("@/views/subjects/IndexView.vue"),
+      meta: {
+        title: 'Assuntos',
+      }
+    },
+    {
+      path: '/assuntos/cadastrar',
+      name: 'subject-register',
+      component: () => import("@/views/subjects/FormView.vue"),
+      meta: {
+        title: 'Assunto - Cadastrar',
+      }
+    },
+    {
+      path: '/assuntos/editar/:id',
+      name: 'subject-edit',
+      component: () => import("@/views/subjects/FormView.vue"),
+      meta: {
+        title: 'Assunto - Editar',
+      }
     },
   ]
 })
