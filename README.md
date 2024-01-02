@@ -46,6 +46,8 @@ Neste repositório foram entregues todos os requisitos.
 ## O que faria se tivesse mais tempo?
 - Adicionaria testes;
 - Deixaria os cadastros de assuntos e autores com modal;
+- Adicionaria filtros para o relatório;
+- Adicionaria paginação.
 
 ## Autor
 - Autor - Jonathan Cruz
