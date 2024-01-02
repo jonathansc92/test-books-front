@@ -1,6 +1,6 @@
 ## Descrição
 
-Front desenvolvido em VueJs.
+Front desenvolvido em VueJs com Bootstrap 5.
 
 ## Decisão da arquitetura utilizada
 
@@ -14,7 +14,6 @@ Na pasta src temos algumas estruturas de pastas.
 - pinia; 
 - vue-toastification;
 - vee-validate;
-- maska; 
 - yup;
 - vue-router;
 
