@@ -42,11 +42,11 @@ Neste repositório foram entregues todos os requisitos.
 - Livros [http://localhost:5173/livros](http://localhost:5173/livros)
 - Autores [http://localhost:5173/autores](http://localhost:5173/autores)
 - Assuntos [http://localhost:5173/assuntos](http://localhost:5173/assuntos)
+- Relatório [http://localhost:5173/relatorios/livros](http://localhost:5173/relatorios/livros)
 
 ## O que faria se tivesse mais tempo?
 - Adicionaria testes;
 - Deixaria os cadastros de assuntos e autores com modal;
-- Adicionaria filtros para o relatório;
 - Adicionaria paginação.
 
 ## Autor

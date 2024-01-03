@@ -48,6 +48,11 @@ const router = createRouter({
       name: 'subject-edit',
       component: () => import("@/views/subjects/FormView.vue"),
     },
+    {
+      path: '/relatorios/livros',
+      name: 'report-books',
+      component: () => import("@/views/reports/books/IndexView.vue"),
+    },
   ]
 })
 
