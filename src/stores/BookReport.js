@@ -23,7 +23,7 @@ export const bookReportStore = defineStore('bookReportStore', {
             this.filter = filter;
         },
         async report() {
-            let apiUrl = this.filter ? `${import.meta.env.VITE_API_URL}/reports/books/export?${this.filter}` : `${import.meta.env.VITE_API_URL}/reports/books`;
+            let apiUrl = this.filter ? `${import.meta.env.VITE_API_URL}/reports/books/export?${this.filter}` : `${import.meta.env.VITE_API_URL}/reports/books/export`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -37,12 +37,19 @@ export const bookReportStore = defineStore('bookReportStore', {
                     toast.error(messages.ERROR);
                 } else {
                     const blob = await response.blob();
+
                     const url = window.URL.createObjectURL(blob);
+
                     const link = document.createElement('a');
+
                     link.href = url;
-                    link.setAttribute('download', 'relatorio.xlsx');
+
+                    link.setAttribute('download', `relatorio_livros_${new Date().getTime()}.xlsx`);
+
                     document.body.appendChild(link);
+
                     link.click();
+
                     document.body.removeChild(link);
                 }
             } catch (error) {
