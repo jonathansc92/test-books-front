@@ -34,7 +34,7 @@ export const bookReportStore = defineStore('bookReportStore', {
                 });
 
                 if (!response.ok) {
-                    toast.error(messages.ERROR);
+                    toast.warning(data.message ? data.message : messages.ERROR);
                 } else {
                     const blob = await response.blob();
 
@@ -54,7 +54,6 @@ export const bookReportStore = defineStore('bookReportStore', {
                 }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async get() {
@@ -63,16 +62,15 @@ export const bookReportStore = defineStore('bookReportStore', {
             try {
                 const response = await fetch(apiUrl);
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                this.booksReport = data.data;
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    this.booksReport = data.data;
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
     },

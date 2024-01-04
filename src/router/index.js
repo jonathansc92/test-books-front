@@ -4,6 +4,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/autores',
+    },
+    {
       path: '/livros',
       name: 'book',
       component: () => import("@/views/books/IndexView.vue"),

@@ -23,32 +23,30 @@ export const subjectStore = defineStore('subjectStore', {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/subjects`);
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                this.subjects = data.data;
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    this.subjects = data.data;
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async show(id) {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/subjects/${id}`);
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                this.subject = data.data;
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    this.subject = data.data;
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async create(values) {
@@ -61,18 +59,18 @@ export const subjectStore = defineStore('subjectStore', {
                     body: JSON.stringify(values)
                 });
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                toast.success(data.message);
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    this.subject = data.data;
+                    toast.success(data.message);
 
-                this.router.push('/assuntos');
+                    this.router.push('/assuntos');
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async update(id, values) {
@@ -85,18 +83,17 @@ export const subjectStore = defineStore('subjectStore', {
                     body: JSON.stringify(values)
                 });
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                toast.success(data.message);
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    toast.success(data.message);
 
-                this.router.push('/assuntos');
+                    this.router.push('/assuntos');
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async delete(id) {
@@ -105,19 +102,18 @@ export const subjectStore = defineStore('subjectStore', {
                     method: 'DELETE'
                 });
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                const itemIndex = this.subjects.findIndex(subject => subject.id === id);
-                this.subjects.splice(itemIndex, 1);
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    const itemIndex = this.subjects.findIndex(subject => subject.id === id);
+                    this.subjects.splice(itemIndex, 1);
 
-                toast.success(data.message);
+                    toast.success(data.message);
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
     },

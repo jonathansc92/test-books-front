@@ -23,32 +23,30 @@ export const bookStore = defineStore('bookStore', {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/books`);
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                this.books = data.data;
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    this.books = data.data;
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async show(id) {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${id}`);
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                this.book = data.data;
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    this.book = data.data;
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async create(values) {
@@ -61,18 +59,18 @@ export const bookStore = defineStore('bookStore', {
                     body: JSON.stringify(values)
                 });
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                toast.success(data.message);
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    this.book = data.data;
+                    toast.success(data.message);
 
-                this.router.push('/livros');
+                    this.router.push('/livros');
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async update(id, values) {
@@ -85,18 +83,17 @@ export const bookStore = defineStore('bookStore', {
                     body: JSON.stringify(values)
                 });
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                toast.success(data.message);
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    toast.success(data.message);
 
-                this.router.push('/livros');
+                    this.router.push('/livros');
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
         async delete(id) {
@@ -105,19 +102,18 @@ export const bookStore = defineStore('bookStore', {
                     method: 'DELETE'
                 });
 
-                if (!response.ok) {
-                    toast.error(messages.ERROR);
-                }
-
                 const data = await response.json();
 
-                const itemIndex = this.books.findIndex(book => book.id === id);
-                this.books.splice(itemIndex, 1);
+                if (!response.ok) {
+                    toast.warning(data.message ? data.message : messages.ERROR);
+                } else {
+                    const itemIndex = this.books.findIndex(book => book.id === id);
+                    this.books.splice(itemIndex, 1);
 
-                toast.success(data.message);
+                    toast.success(data.message);
+                }
             } catch (error) {
                 console.error('Error submitting data:', error);
-                toast.error(messages.ERROR);
             }
         },
     },
